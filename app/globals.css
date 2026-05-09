@@ -113,23 +113,23 @@ html {
 
 /* Fluid headline typography */
 .text-hero {
-  font-size: clamp(2.8rem, 7vw, 5.5rem);
-  line-height: 1.05;
+  font-size: clamp(2.6rem, 6.5vw, 5rem);
+  line-height: 1.06;
   letter-spacing: -0.03em;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .text-section {
-  font-size: clamp(2rem, 4vw, 3.25rem);
+  font-size: clamp(1.9rem, 4vw, 3rem);
   line-height: 1.1;
   letter-spacing: -0.025em;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .text-label {
-  font-size: 0.75rem;
-  font-weight: 500;
-  letter-spacing: 0.1em;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 

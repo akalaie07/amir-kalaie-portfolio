@@ -37,72 +37,95 @@ export default function ProjectsOverview({ projects }: ProjectsOverviewProps) {
         </motion.div>
 
         {/* Cards grid */}
-        <motion.div
-          variants={reduced ? {} : stagger}
-          className="grid md:grid-cols-2 gap-4"
-        >
-          {projects.map((project) => {
+        <motion.div variants={reduced ? {} : stagger} className="grid md:grid-cols-2 gap-5">
+          {projects.map((project, index) => {
             const status = statusConfig[project.status];
             return (
               <motion.div
                 key={project.id}
                 variants={reduced ? {} : fadeUp}
-                className="card-hover group relative rounded-2xl border border-white/[0.08] p-6 flex flex-col gap-4 cursor-pointer"
-                style={{ background: '#111113' }}
+                className="group relative rounded-3xl overflow-hidden border border-white/[0.07] transition-all duration-300 hover:border-white/[0.15] hover:-translate-y-1"
+                style={{ background: '#0F0F12' }}
               >
-                {/* Top row */}
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex flex-col gap-1">
+                {/* Colored top bar */}
+                <div
+                  className="absolute top-0 inset-x-0 h-[2px]"
+                  style={{ background: `linear-gradient(90deg, ${project.color ?? '#6366F1'}, transparent)` }}
+                />
+
+                {/* Background glow on hover */}
+                <div
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                  style={{ background: `radial-gradient(ellipse at 20% 20%, ${project.color ?? '#6366F1'}0D 0%, transparent 60%)` }}
+                  aria-hidden
+                />
+
+                <div className="relative p-7 flex flex-col gap-5 h-full">
+                  {/* Top row */}
+                  <div className="flex items-start justify-between gap-4">
+                    {/* Project icon / color dot */}
+                    <div
+                      className="w-10 h-10 rounded-2xl flex items-center justify-center flex-shrink-0"
+                      style={{ background: `${project.color ?? '#6366F1'}20`, border: `1px solid ${project.color ?? '#6366F1'}30` }}
+                    >
+                      <div className="w-3.5 h-3.5 rounded-full" style={{ background: project.color ?? '#6366F1' }} />
+                    </div>
+
+                    {/* Status + year */}
                     <div className="flex items-center gap-2">
                       <span
-                        className="text-xs font-medium px-2 py-0.5 rounded-full"
+                        className="text-xs font-medium px-2.5 py-0.5 rounded-full"
                         style={{ color: status.color, background: status.bg }}
                       >
                         {status.label}
                       </span>
                       <span className="text-xs text-text-muted">{project.year}</span>
                     </div>
-                    <h3 className="text-lg font-semibold text-text-primary mt-1">{project.title}</h3>
                   </div>
 
-                  {/* Color dot */}
-                  <div
-                    className="w-8 h-8 rounded-full flex-shrink-0 opacity-60"
-                    style={{ background: project.color ?? '#6366F1' }}
-                  />
-                </div>
+                  {/* Title & tagline */}
+                  <div className="flex flex-col gap-2">
+                    <h3 className="text-xl font-bold text-text-primary tracking-tight">{project.title}</h3>
+                    <p className="text-sm text-text-secondary leading-relaxed">{project.tagline}</p>
+                  </div>
 
-                {/* Tagline */}
-                <p className="text-sm text-text-secondary leading-relaxed">{project.tagline}</p>
-
-                {/* Tech stack */}
-                <div className="flex flex-wrap gap-1.5">
-                  {project.techStack.slice(0, 4).map((tech) => (
-                    <span
-                      key={tech}
-                      className="text-xs px-2 py-0.5 rounded-md text-text-muted border border-white/[0.06]"
-                      style={{ background: 'rgba(255,255,255,0.02)' }}
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                  {project.techStack.length > 4 && (
-                    <span className="text-xs px-2 py-0.5 text-text-muted">
-                      +{project.techStack.length - 4}
-                    </span>
+                  {/* Highlight metric */}
+                  {project.highlight && (
+                    <p className="text-xs text-text-muted italic border-l-2 pl-3" style={{ borderColor: `${project.color ?? '#6366F1'}60` }}>
+                      {project.highlight}
+                    </p>
                   )}
-                </div>
 
-                {/* Arrow link */}
-                {project.links.caseStudy && (
-                  <Link
-                    href={project.links.caseStudy}
-                    className="mt-auto flex items-center gap-1.5 text-xs text-accent group-hover:gap-2.5 transition-all duration-200"
-                  >
-                    Case Study lesen
-                    <span>→</span>
-                  </Link>
-                )}
+                  {/* Spacer */}
+                  <div className="flex-1" />
+
+                  {/* Footer: tech + link */}
+                  <div className="flex items-end justify-between gap-3 pt-3 border-t border-white/[0.05]">
+                    <div className="flex flex-wrap gap-1.5">
+                      {project.techStack.slice(0, 3).map((tech) => (
+                        <span
+                          key={tech}
+                          className="text-[11px] px-2 py-0.5 rounded-md text-text-muted border border-white/[0.06]"
+                          style={{ background: 'rgba(255,255,255,0.02)' }}
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                      {project.techStack.length > 3 && (
+                        <span className="text-[11px] text-text-muted px-1">+{project.techStack.length - 3}</span>
+                      )}
+                    </div>
+
+                    {project.links.caseStudy && (
+                      <Link
+                        href={project.links.caseStudy}
+                        className="flex-shrink-0 flex items-center gap-1 text-xs text-accent group-hover:gap-2 transition-all duration-200 font-medium"
+                      >
+                        Details →
+                      </Link>
+                    )}
+                  </div>
+                </div>
               </motion.div>
             );
           })}
