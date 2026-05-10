@@ -11,8 +11,8 @@ export default function Footer() {
       <div className="shell">
         {/* Oversized wordmark */}
         <div className="wordmark reveal">
-          <span style={{ display: 'inline-flex', alignItems: 'center' }}>
-            <LogoMark size={120} />
+          <span style={{ display: 'inline-flex', alignItems: 'center', flexShrink: 0 }}>
+            <LogoMark size={140} variant="image" />
           </span>
           <span>Kalaie<em>.</em></span>
         </div>
