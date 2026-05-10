@@ -4,14 +4,16 @@ import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { useT } from '@/components/Providers';
 
-/* ---------- TypingName ---------- */
+/* ---------- TypingName — always two lines (Amir / Kalaie.) ---------- */
 function TypingName() {
   const styles = [
     { font: 'var(--font-instrument-serif, Georgia, serif)', italic: true,  weight: 400, spacing: '-0.025em' },
     { font: 'var(--font-space-grotesk, system-ui, sans-serif)', italic: false, weight: 700, spacing: '-0.04em' },
     { font: 'var(--font-jetbrains-mono, monospace)', italic: false, weight: 500, spacing: '-0.02em' },
   ];
-  const text = 'Amir Kalaie.';
+  const L1 = 'Amir';
+  const L2 = 'Kalaie.';
+  const total = L1.length + L2.length; // 11
   const [styleIdx, setStyleIdx] = useState(0);
   const [chars, setChars] = useState(0);
   const [phase, setPhase] = useState<'typing' | 'hold' | 'deleting' | 'switch'>('typing');
@@ -19,18 +21,18 @@ function TypingName() {
   useEffect(() => {
     let id: ReturnType<typeof setTimeout>;
     if (phase === 'typing') {
-      if (chars < text.length) {
+      if (chars < total) {
         id = setTimeout(() => setChars(c => c + 1), 70 + Math.random() * 35);
       } else {
         id = setTimeout(() => setPhase('hold'), 100);
       }
     } else if (phase === 'hold') {
-      id = setTimeout(() => setPhase('deleting'), 1700);
+      id = setTimeout(() => setPhase('deleting'), 1900);
     } else if (phase === 'deleting') {
       if (chars > 0) {
-        id = setTimeout(() => setChars(c => c - 1), 32);
+        id = setTimeout(() => setChars(c => c - 1), 30);
       } else {
-        id = setTimeout(() => setPhase('switch'), 200);
+        id = setTimeout(() => setPhase('switch'), 180);
       }
     } else if (phase === 'switch') {
       setStyleIdx(si => (si + 1) % styles.length);
@@ -41,21 +43,31 @@ function TypingName() {
   }, [chars, phase, styleIdx]);
 
   const s = styles[styleIdx];
-  const displayed = text.slice(0, chars);
+  // Split chars between the two lines
+  const row1 = L1.slice(0, Math.min(chars, L1.length));
+  const row2 = chars > L1.length ? L2.slice(0, chars - L1.length) : '';
+  const caretOnRow2 = chars > L1.length;
 
   return (
-    <span className="typing-name" aria-label={text}>
-      <span
-        className="tn-text"
-        style={{
-          fontFamily: s.font,
-          fontStyle: s.italic ? 'italic' : 'normal',
-          fontWeight: s.weight,
-          letterSpacing: s.spacing,
-        }}
-      >
-        {displayed}
-        <span className="tn-caret" aria-hidden="true" />
+    <span
+      className="typing-name"
+      aria-label={`${L1} ${L2}`}
+      style={{
+        fontFamily: s.font,
+        fontStyle: s.italic ? 'italic' : 'normal',
+        fontWeight: s.weight,
+        letterSpacing: s.spacing,
+      }}
+    >
+      {/* Line 1 — always reserved as a block */}
+      <span className="tn-row">
+        {row1}
+        {!caretOnRow2 && <span className="tn-caret" aria-hidden="true" />}
+      </span>
+      {/* Line 2 — always a block so layout never shifts */}
+      <span className="tn-row">
+        {row2 || '​'}{/* zero-width space holds line height when empty */}
+        {caretOnRow2 && <span className="tn-caret" aria-hidden="true" />}
       </span>
     </span>
   );
@@ -157,8 +169,7 @@ export default function HeroSection() {
   return (
     <header className="hero" id="top">
       <div className="shell">
-        <div style={{ display: 'grid', gridTemplateColumns: '1.15fr 0.85fr', gap: 64, alignItems: 'end' }}
-             className="hero-grid">
+        <div className="hero-grid">
           <div className="reveal-stagger">
             <div className="label tech-label">
               <span className="bracket-l">[</span>
@@ -203,11 +214,6 @@ export default function HeroSection() {
           </div>
         </div>
       </div>
-      <style>{`
-        @media (max-width: 960px) {
-          .hero-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
-        }
-      `}</style>
     </header>
   );
 }

@@ -54,8 +54,8 @@
   /* Geometry */
   --radius:        14px;
   --radius-lg-token: 22px;
-  --shell:         min(1320px, 92vw);
-  --gutter:        clamp(20px, 3vw, 36px);
+  --shell:         min(1520px, 96vw);
+  --gutter:        clamp(20px, 3vw, 44px);
 }
 
 [data-theme="dark"] {
@@ -405,21 +405,25 @@ nav.top.scrolled {
    HERO
    ========================================================= */
 .hero { position: relative; padding: 140px 0 80px; }
-.hero .grid {
+.hero-grid {
   display: grid;
-  grid-template-columns: 1.15fr 0.85fr;
-  gap: 64px;
-  align-items: end;
+  grid-template-columns: 1.3fr 0.7fr;
+  gap: 80px;
+  align-items: center;
 }
 @media (max-width: 960px) {
-  .hero .grid { grid-template-columns: 1fr; gap: 40px; }
+  .hero-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
   .hero { padding: 110px 0 40px; }
 }
 .hero-name {
-  font-size: clamp(54px, 9.5vw, 168px);
-  line-height: 0.92;
+  font-size: clamp(56px, 8vw, 148px);
+  line-height: 0.95;
   letter-spacing: -0.025em;
-  min-height: 1.1em;
+}
+/* Force two-line name: each row is always a block */
+.tn-row {
+  display: block;
+  white-space: nowrap;
 }
 .hero-blurb {
   margin-top: 28px;
@@ -465,7 +469,7 @@ nav.top.scrolled {
   position: relative;
   aspect-ratio: 4/5;
   width: 100%;
-  max-width: 460px;
+  max-width: 520px;
   margin-left: auto;
 }
 .portrait-glow {
