@@ -1,15 +1,21 @@
 'use client';
 
-import { motion, useScroll, useSpring } from 'framer-motion';
+import { useEffect } from 'react';
 
 export default function ScrollProgress() {
-  const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
+  useEffect(() => {
+    const onScroll = () => {
+      const bar = document.getElementById('ak-progress');
+      const h = document.documentElement;
+      const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+      if (bar) bar.style.setProperty('--p', pct + '%');
+      const nav = document.querySelector('nav.top');
+      if (nav) nav.classList.toggle('scrolled', h.scrollTop > 24);
+    };
+    onScroll();
+    addEventListener('scroll', onScroll, { passive: true });
+    return () => removeEventListener('scroll', onScroll);
+  }, []);
 
-  return (
-    <motion.div
-      className="fixed top-0 left-0 right-0 h-[2px] bg-accent z-50 origin-left"
-      style={{ scaleX }}
-    />
-  );
+  return <div className="progress-bar" id="ak-progress" aria-hidden="true" />;
 }

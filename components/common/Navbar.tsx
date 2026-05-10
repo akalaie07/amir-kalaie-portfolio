@@ -1,129 +1,75 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import Link from 'next/link';
-import { cn } from '@/lib/utils';
-import { NAV_ITEMS, SITE } from '@/lib/constants';
-import { useScrollSection } from '@/hooks/useScrollSection';
+import { useContext } from 'react';
+import { LangCtx, ThemeCtx, useT } from '@/components/Providers';
+import LogoMark from '@/components/common/LogoMark';
+import CityClock from '@/components/common/CityClock';
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const activeSection = useScrollSection();
-
-  useEffect(() => {
-    const handler = () => setScrolled(window.scrollY > 60);
-    window.addEventListener('scroll', handler, { passive: true });
-    return () => window.removeEventListener('scroll', handler);
-  }, []);
+  const T = useT();
+  const { lang, setLang } = useContext(LangCtx);
+  const { theme, setTheme } = useContext(ThemeCtx);
 
   return (
-    <>
-      <header
-        className={cn(
-          'fixed top-0 left-0 right-0 z-40 transition-all duration-300',
-          scrolled
-            ? 'bg-[#09090B]/80 backdrop-blur-md border-b border-white/[0.06]'
-            : 'bg-transparent'
-        )}
-      >
-        <nav className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          {/* Logo */}
-          <Link href="/" className="text-sm font-semibold tracking-tight text-text-primary hover:text-accent transition-colors">
-            {SITE.name}
-          </Link>
+    <nav className="top">
+      <div className="shell nav-row">
+        {/* Brand */}
+        <a href="#top" className="brand" aria-label="Amir Kalaie home">
+          <span className="mark"><LogoMark size={30} /></span>
+          <span className="name">
+            Amir Kalaie<span className="dot">.</span>
+          </span>
+        </a>
 
-          {/* Desktop nav */}
-          <ul className="hidden md:flex items-center gap-8">
-            {NAV_ITEMS.map((item) => {
-              const sectionId = item.href.replace('#', '');
-              const isActive = activeSection === sectionId;
-              return (
-                <li key={item.href}>
-                  <a
-                    href={item.href}
-                    className={cn(
-                      'text-sm transition-colors duration-200 relative group',
-                      isActive ? 'text-text-primary' : 'text-text-secondary hover:text-text-primary'
-                    )}
-                  >
-                    {item.label}
-                    <span
-                      className={cn(
-                        'absolute -bottom-0.5 left-0 h-px bg-accent transition-all duration-200',
-                        isActive ? 'w-full' : 'w-0 group-hover:w-full'
-                      )}
-                    />
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
+        {/* Nav links */}
+        <div className="nav-mid">
+          <a href="#work">{T('Work', 'Projekte')}</a>
+          <a href="#practice">{T('Practice', 'Disziplinen')}</a>
+          <a href="#process">{T('Process', 'Prozess')}</a>
+          <a href="#philosophy">{T('About', 'Über mich')}</a>
+          <a href="#contact">{T('Contact', 'Kontakt')}</a>
+        </div>
 
-          {/* CTA */}
-          <div className="hidden md:flex items-center gap-4">
-            {SITE.availableForWork && (
-              <span className="flex items-center gap-1.5 text-xs text-text-secondary">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                Verfügbar
-              </span>
-            )}
-            <a
-              href="#contact"
-              className="text-sm px-4 py-1.5 rounded-full border border-accent/40 text-accent hover:bg-accent hover:text-white transition-all duration-200"
-            >
-              Kontakt
-            </a>
-          </div>
+        {/* Nav end */}
+        <div className="nav-end">
+          <CityClock />
 
-          {/* Mobile hamburger */}
+          {/* Theme toggle */}
           <button
-            className="md:hidden p-2 text-text-secondary hover:text-text-primary transition-colors"
-            onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label="Menü öffnen"
+            className="theme-toggle"
+            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+            aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
           >
-            <div className="w-5 flex flex-col gap-1.5">
-              <span className={cn('h-px bg-current transition-all duration-200', mobileOpen && 'rotate-45 translate-y-2')} />
-              <span className={cn('h-px bg-current transition-all duration-200', mobileOpen && 'opacity-0')} />
-              <span className={cn('h-px bg-current transition-all duration-200', mobileOpen && '-rotate-45 -translate-y-2')} />
-            </div>
+            {theme === 'dark' ? (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="4" />
+                <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+              </svg>
+            ) : (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" />
+              </svg>
+            )}
           </button>
-        </nav>
-      </header>
 
-      {/* Mobile drawer */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-x-0 top-16 z-30 bg-[#09090B]/95 backdrop-blur-xl border-b border-white/[0.06] md:hidden"
+          {/* Lang toggle */}
+          <button
+            className="lang-toggle"
+            onClick={() => setLang(lang === 'en' ? 'de' : 'en')}
+            aria-label="Switch language"
           >
-            <nav className="max-w-6xl mx-auto px-6 py-8 flex flex-col gap-6">
-              {NAV_ITEMS.map((item) => (
-                <a
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setMobileOpen(false)}
-                  className="text-lg text-text-secondary hover:text-text-primary transition-colors"
-                >
-                  {item.label}
-                </a>
-              ))}
-              <a
-                href="#contact"
-                onClick={() => setMobileOpen(false)}
-                className="mt-2 text-base px-6 py-3 rounded-full border border-accent/40 text-accent text-center hover:bg-accent hover:text-white transition-all duration-200"
-              >
-                Kontakt aufnehmen
-              </a>
-            </nav>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </>
+            <span className={lang === 'en' ? 'on' : ''}>EN</span>
+            <span className="sep">·</span>
+            <span className={lang === 'de' ? 'on' : ''}>DE</span>
+          </button>
+
+          {/* Availability pill */}
+          <span className="pill">
+            <span className="dot" />
+            {T('Booking 2026', 'Buchbar 2026')}
+          </span>
+        </div>
+      </div>
+    </nav>
   );
 }

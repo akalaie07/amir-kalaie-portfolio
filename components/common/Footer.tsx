@@ -1,25 +1,63 @@
-import Link from 'next/link';
-import { SITE, SOCIAL } from '@/lib/constants';
+'use client';
+
+import { useT } from '@/components/Providers';
+import LogoMark from '@/components/common/LogoMark';
+import CityClock from '@/components/common/CityClock';
 
 export default function Footer() {
-  const year = new Date().getFullYear();
-
+  const T = useT();
   return (
-    <footer className="border-t border-white/[0.06] px-6 py-8">
-      <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-text-muted">
-        <p>
-          © {year} {SITE.name} — Built with Next.js & Tailwind CSS
-        </p>
-        <div className="flex items-center gap-6">
-          <a href={SOCIAL.github} target="_blank" rel="noopener noreferrer" className="hover:text-text-secondary transition-colors">
-            GitHub
-          </a>
-          <a href={SOCIAL.linkedin} target="_blank" rel="noopener noreferrer" className="hover:text-text-secondary transition-colors">
-            LinkedIn
-          </a>
-          <a href={SOCIAL.twitter} target="_blank" rel="noopener noreferrer" className="hover:text-text-secondary transition-colors">
-            Twitter
-          </a>
+    <footer className="bottom">
+      <div className="shell">
+        {/* Oversized wordmark */}
+        <div className="wordmark reveal">
+          <span style={{ display: 'inline-flex', alignItems: 'center' }}>
+            <LogoMark size={120} />
+          </span>
+          <span>Kalaie<em>.</em></span>
+        </div>
+
+        {/* Footer grid */}
+        <div className="footer-grid">
+          <div>
+            <h5>{T('Studio', 'Studio')}</h5>
+            <ul>
+              <li>{T('Independent practice', 'Unabhängige Praxis')}</li>
+              <li>Berlin · {T('Working worldwide', 'Weltweit tätig')}</li>
+              <li>{T('Booking Q3 / Q4 2026', 'Buchbar Q3 / Q4 2026')}</li>
+            </ul>
+          </div>
+          <div>
+            <h5>{T('Index', 'Verzeichnis')}</h5>
+            <ul>
+              <li><a href="#work">{T('Selected work', 'Projekte')}</a></li>
+              <li><a href="#practice">{T('Practice', 'Disziplinen')}</a></li>
+              <li><a href="#process">{T('Process', 'Prozess')}</a></li>
+              <li><a href="#philosophy">{T('About', 'Über mich')}</a></li>
+            </ul>
+          </div>
+          <div>
+            <h5>{T('Elsewhere', 'Anderswo')}</h5>
+            <ul>
+              <li><a href="https://github.com/amirkalaie" target="_blank" rel="noreferrer">GitHub ↗</a></li>
+              <li><a href="https://linkedin.com/in/amirkalaie" target="_blank" rel="noreferrer">LinkedIn ↗</a></li>
+              <li><a href="https://twitter.com/amirkalaie" target="_blank" rel="noreferrer">Twitter / X ↗</a></li>
+            </ul>
+          </div>
+          <div>
+            <h5>{T('Contact', 'Kontakt')}</h5>
+            <ul>
+              <li><a href="mailto:hello@amirkalaie.com">hello@amirkalaie.com</a></li>
+              <li>{T('Response < 24h', 'Antwort < 24 Std.')}</li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Sign-off */}
+        <div className="signoff">
+          <span>© 2026 Amir Kalaie · {T('Independent Studio', 'Unabhängiges Studio')}</span>
+          <span>{T('Designed & engineered in Berlin', 'Entworfen & entwickelt in Berlin')}</span>
+          <CityClock />
         </div>
       </div>
     </footer>

@@ -1,88 +1,44 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { fadeUp, stagger, viewportOnce } from '@/lib/animations';
-import { useReducedMotion } from '@/hooks/useReducedMotion';
-import SectionWrapper from '@/components/common/SectionWrapper';
-import { SITE, SOCIAL } from '@/lib/constants';
+import { useT } from '@/components/Providers';
 
 export default function ContactSection() {
-  const reduced = useReducedMotion();
-
+  const T = useT();
   return (
-    <SectionWrapper id="contact" className="border-t border-white/[0.04]" narrow>
-      <motion.div
-        variants={reduced ? {} : stagger}
-        initial="hidden"
-        whileInView="visible"
-        viewport={viewportOnce}
-        className="text-center flex flex-col items-center gap-8"
-      >
-        {/* Background glow */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          aria-hidden
-          style={{
-            background: 'radial-gradient(ellipse at 50% 100%, rgba(99,102,241,0.08) 0%, transparent 70%)',
-          }}
-        />
-
-        <motion.div variants={reduced ? {} : fadeUp} className="flex flex-col gap-4 relative z-10">
-          <p className="text-label text-accent">Lass uns zusammenarbeiten</p>
-          <h2 className="text-section text-text-primary">
-            Du hast eine Produktidee?<br />
-            Lass sie uns richtig bauen.
+    <section className="contact" id="contact">
+      <div className="shell">
+        <div className="reveal">
+          <span className="label tech-label">
+            <span className="bracket-l">[</span>— {T("Let's talk", 'Sprechen wir')}<span className="bracket-r">]</span>
+          </span>
+          <h2 className="display" style={{ marginTop: 28 }}>
+            {T('Have a problem worth ', 'Ein Problem, das es wert ist ')}
+            <em>{T('building', 'gebaut')}</em>
+            {T('?', ' zu werden?')}
           </h2>
-        </motion.div>
-
-        <motion.p
-          variants={reduced ? {} : fadeUp}
-          className="text-text-secondary leading-relaxed max-w-lg relative z-10"
-        >
-          Ich nehme aktuell 1–2 neue Projekte an. Schreib mir, was du baust — ich antworte innerhalb von 24 Stunden.
-        </motion.p>
-
-        {/* Primary CTA */}
-        <motion.div variants={reduced ? {} : fadeUp} className="flex flex-col sm:flex-row items-center gap-4 relative z-10">
-          <a
-            href={`mailto:${SITE.email}`}
-            className="inline-flex items-center gap-2.5 px-8 py-4 rounded-full bg-accent text-white font-medium hover:bg-accent-bright transition-all duration-200 hover:shadow-xl hover:shadow-accent/25 text-base"
-          >
-            Nachricht senden
-            <span aria-hidden>→</span>
-          </a>
-          <a
-            href="https://cal.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm text-text-secondary hover:text-text-primary transition-colors underline underline-offset-4"
-          >
-            Oder 30-min Discovery Call buchen
-          </a>
-        </motion.div>
-
-        {/* Social links */}
-        <motion.div
-          variants={reduced ? {} : fadeUp}
-          className="flex items-center gap-6 pt-4 border-t border-white/[0.06] w-full justify-center relative z-10"
-        >
-          {[
-            { label: 'GitHub', href: SOCIAL.github },
-            { label: 'LinkedIn', href: SOCIAL.linkedin },
-            { label: 'Twitter / X', href: SOCIAL.twitter },
-          ].map((link) => (
+          <p className="sub">
+            {T(
+              'I take on two to three external engagements per year. Best fit: founders shipping their first SaaS, or established teams who need a senior product engineer to ship the next one.',
+              'Ich übernehme zwei bis drei externe Projekte pro Jahr. Passt am besten zu: Gründer, die ihre erste SaaS ausliefern, oder etablierte Teams, die einen Senior Product Engineer für die nächste brauchen.'
+            )}
+          </p>
+          <div className="contact-row">
             <a
-              key={link.label}
-              href={link.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm text-text-muted hover:text-text-secondary transition-colors"
+              href="mailto:hello@amirkalaie.com"
+              className="email-btn"
+              data-cursor-text={T('Send', 'Senden')}
             >
-              {link.label}
+              hello@amirkalaie.com <span className="arrow">→</span>
             </a>
-          ))}
-        </motion.div>
-      </motion.div>
-    </SectionWrapper>
+            <a href="https://linkedin.com/in/amirkalaie" className="cta ghost" target="_blank" rel="noreferrer">
+              LinkedIn ↗
+            </a>
+            <a href="https://github.com/amirkalaie" className="cta ghost" target="_blank" rel="noreferrer">
+              GitHub ↗
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }

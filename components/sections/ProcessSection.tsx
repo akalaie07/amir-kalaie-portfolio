@@ -1,98 +1,84 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { fadeUp, stagger, viewportOnce } from '@/lib/animations';
-import { useReducedMotion } from '@/hooks/useReducedMotion';
-import SectionWrapper from '@/components/common/SectionWrapper';
-
-const steps = [
-  {
-    number: '01',
-    title: 'Discovery',
-    description: 'Wir klären Ziel, Scope und Erfolgskriterien in einem einzigen Call. Kein Overhead, kein Hin und Her.',
-  },
-  {
-    number: '02',
-    title: 'Architektur',
-    description: 'Ich designe das System, bevor ich eine Zeile Code schreibe. Klare Entscheidungen jetzt sparen Wochen später.',
-  },
-  {
-    number: '03',
-    title: 'Iteration',
-    description: 'Wöchentliche Demos, asynchrone Updates, volle Transparenz. Du weißt immer, wo wir stehen.',
-  },
-  {
-    number: '04',
-    title: 'Launch',
-    description: 'Staged Rollout, Monitoring und Post-Launch-Support. Das Produkt geht live — und bleibt stabil.',
-  },
-  {
-    number: '05',
-    title: 'Wachstum',
-    description: 'Optional: Ich bleibe als technischer Advisor an Bord und helfe beim Scale-up.',
-  },
-];
+import { useT } from '@/components/Providers';
 
 export default function ProcessSection() {
-  const reduced = useReducedMotion();
+  const T = useT();
+
+  const phases = [
+    {
+      week: T('Week 01', 'Woche 01'),
+      n: '01',
+      title: T('Frame', 'Rahmen'),
+      body: T(
+        'A short, intense discovery. We name the problem, the user, and the one outcome the product has to earn.',
+        'Kurze, intensive Discovery. Wir benennen Problem, Nutzer und das eine Ergebnis, das das Produkt liefern muss.'
+      ),
+    },
+    {
+      week: T('Week 02–03', 'Woche 02–03'),
+      n: '02',
+      title: T('Architect', 'Architektur'),
+      body: T(
+        'Schema first, surface second. Data model, auth, billing skeleton — the parts that get expensive to change later.',
+        'Erst Schema, dann Oberfläche. Datenmodell, Auth, Billing-Skelett — die Teile, deren Änderung später teuer wird.'
+      ),
+    },
+    {
+      week: T('Week 04–08', 'Woche 04–08'),
+      n: '03',
+      title: T('Build', 'Bauen'),
+      body: T(
+        'Two-week sprints, weekly demos. The product ships internally before it ships externally — every release is dogfooded.',
+        'Zwei-Wochen-Sprints, wöchentliche Demos. Intern wird vor extern ausgeliefert — jedes Release wird selbst genutzt.'
+      ),
+    },
+    {
+      week: T('Week 09→', 'Woche 09→'),
+      n: '04',
+      title: T('Operate', 'Betrieb'),
+      body: T(
+        'Quiet support, analytics, retention. I stay attached to the product after launch — most of the value lives there.',
+        'Stiller Support, Analytics, Retention. Nach dem Launch bleibe ich am Produkt — dort entsteht der meiste Wert.'
+      ),
+    },
+  ];
 
   return (
-    <SectionWrapper id="process" className="border-t border-white/[0.04]">
-      <motion.div
-        variants={reduced ? {} : stagger}
-        initial="hidden"
-        whileInView="visible"
-        viewport={viewportOnce}
-        className="space-y-12"
-      >
-        {/* Header */}
-        <motion.div variants={reduced ? {} : fadeUp} className="flex flex-col gap-3 max-w-xl">
-          <p className="text-label text-accent">Prozess</p>
-          <h2 className="text-section text-text-primary">So arbeiten wir zusammen</h2>
-          <p className="text-text-secondary leading-relaxed">
-            Kein Black-Box-Entwickeln. Volle Transparenz, klare Phasen, messbare Ergebnisse.
-          </p>
-        </motion.div>
-
-        {/* Steps — vertical on mobile, horizontal on large screens */}
-        <div className="relative">
-          {/* Connector line (desktop only) */}
-          <div
-            className="hidden lg:block absolute top-8 left-8 right-8 h-px"
-            style={{ background: 'linear-gradient(90deg, transparent, rgba(99,102,241,0.3), rgba(99,102,241,0.3), transparent)' }}
-          />
-
-          <motion.div
-            variants={reduced ? {} : stagger}
-            className="grid lg:grid-cols-5 gap-4 lg:gap-6"
-          >
-            {steps.map((step) => (
-              <motion.div
-                key={step.number}
-                variants={reduced ? {} : fadeUp}
-                className="relative flex lg:flex-col gap-4 lg:gap-3 p-4 rounded-2xl border border-white/[0.06] hover:border-accent/20 transition-colors duration-200"
-                style={{ background: '#111113' }}
-              >
-                {/* Number dot */}
-                <div className="flex-shrink-0 flex items-center gap-3 lg:gap-0">
-                  <div
-                    className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold text-accent relative z-10"
-                    style={{ background: 'rgba(99,102,241,0.15)', border: '1px solid rgba(99,102,241,0.3)' }}
-                  >
-                    {step.number}
-                  </div>
-                </div>
-
-                {/* Content */}
-                <div className="flex flex-col gap-1">
-                  <h3 className="text-sm font-semibold text-text-primary">{step.title}</h3>
-                  <p className="text-xs text-text-muted leading-relaxed">{step.description}</p>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
+    <section className="block" id="process">
+      <div className="shell">
+        <div className="block-head reveal">
+          <div className="num">
+            <span className="n">03</span> · {T('Process', 'Prozess')}
+          </div>
+          <div>
+            <h2 className="display">
+              {T('From idea to ', 'Von der Idee zum ')}
+              <em>{T('operating product', 'laufenden Produkt')}</em>
+              {T(' in eight weeks.', ' in acht Wochen.')}
+            </h2>
+            <p className="sub">
+              {T(
+                'A predictable rhythm built from shipping eight products solo. Slow at the start where the cost of being wrong is highest; fast in the middle where momentum compounds.',
+                'Ein verlässlicher Rhythmus aus acht solo ausgelieferten Produkten. Langsam am Anfang, wo Fehler am teuersten sind; schnell in der Mitte, wo sich Momentum aufbaut.'
+              )}
+            </p>
+          </div>
         </div>
-      </motion.div>
-    </SectionWrapper>
+
+        <div className="process reveal-stagger">
+          {phases.map(p => (
+            <div className="phase" key={p.n}>
+              <div className="head">
+                <span className="week">{p.week}</span>
+                <span className="num">{p.n}</span>
+              </div>
+              <h4>{p.title}</h4>
+              <p>{p.body}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }
